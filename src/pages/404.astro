@@ -1,0 +1,25 @@
+---
+import Button from '../components/Button.astro';
+import Label from '../components/Label.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found" description="This page doesn't exist.">
+	<section class="container page-header">
+		<Label>Error 404</Label>
+		<h1 class="page-title">Off the track.</h1>
+		<p class="page-intro">The page you're looking for doesn't exist or has moved.</p>
+		<div class="actions back">
+			<Button href="/">Back to home</Button>
+		</div>
+	</section>
+</BaseLayout>
+
+<style>
+	.page-title {
+		margin-top: var(--space-3);
+	}
+	.back {
+		margin-top: var(--space-5);
+	}
+</style>

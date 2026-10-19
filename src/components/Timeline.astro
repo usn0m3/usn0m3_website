@@ -1,0 +1,79 @@
+---
+import { formatYearMonth } from '../lib/content';
+
+interface Props {
+	items: Array<{
+		title: string;
+		org: string;
+		start: string;
+		end: string;
+		summary?: string;
+		highlights?: string[];
+	}>;
+}
+
+const { items } = Astro.props;
+---
+
+<ol class="timeline">
+	{
+		items.map((item) => (
+			<li class="entry">
+				<p class="period">
+					{formatYearMonth(item.start)} — {formatYearMonth(item.end)}
+				</p>
+				<div class="body">
+					<h3 class="title">{item.title}</h3>
+					<p class="org">{item.org}</p>
+					{item.summary && <p class="summary">{item.summary}</p>}
+					{item.highlights && item.highlights.length > 0 && (
+						<ul class="highlights">
+							{item.highlights.map((highlight) => (
+								<li>{highlight}</li>
+							))}
+						</ul>
+					)}
+				</div>
+			</li>
+		))
+	}
+</ol>
+
+<style>
+	.timeline {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	.entry {
+		display: grid;
+		grid-template-columns: 200px minmax(0, 1fr);
+		gap: var(--space-3);
+		padding-block: var(--space-4);
+		border-top: 1px solid var(--color-hairline);
+	}
+	.period {
+		color: var(--color-muted);
+		font-size: 13px;
+	}
+	.title {
+		font-size: 20px;
+	}
+	.org {
+		margin-top: var(--space-1);
+		color: var(--color-ink);
+	}
+	.summary {
+		margin-top: var(--space-2);
+	}
+	.highlights {
+		margin: var(--space-2) 0 0;
+		padding-left: 1.1em;
+	}
+	@media (max-width: 720px) {
+		.entry {
+			grid-template-columns: minmax(0, 1fr);
+			gap: var(--space-2);
+		}
+	}
+</style>

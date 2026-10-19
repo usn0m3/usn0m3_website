@@ -1,0 +1,92 @@
+---
+import Button from '../components/Button.astro';
+import Timeline from '../components/Timeline.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getProfile } from '../lib/collections';
+import { paragraphs } from '../lib/content';
+
+const profile = await getProfile();
+const experience = profile.experience.map((job) => ({
+	title: job.role,
+	org: job.company,
+	start: job.start,
+	end: job.end,
+	summary: job.summary,
+	highlights: job.highlights,
+}));
+const education = profile.education.map((school) => ({
+	title: school.degree,
+	org: school.school,
+	start: school.start,
+	end: school.end,
+}));
+---
+
+<BaseLayout title="About" description={`About ${profile.name}: experience, skills and education.`}>
+	<div class="container">
+		<header class="page-header">
+			<h1 class="page-title">About</h1>
+		</header>
+		<div class="bio">
+			{paragraphs(profile.bio).map((text) => <p>{text}</p>)}
+		</div>
+		<div class="actions about-actions">
+			<Button href="/resume.pdf" download>Download résumé</Button>
+			<Button href={`mailto:${profile.email}`} variant="outline">Email me</Button>
+		</div>
+
+		<section class="section" aria-labelledby="experience-heading">
+			<div class="section-head">
+				<h2 id="experience-heading" class="section-heading">Experience</h2>
+			</div>
+			<Timeline items={experience} />
+		</section>
+
+		<section class="section" aria-labelledby="skills-heading">
+			<div class="section-head">
+				<h2 id="skills-heading" class="section-heading">Skills</h2>
+			</div>
+			<div class="skills">
+				{
+					profile.skills.map((skill) => (
+						<div>
+							<h3 class="skill-group">{skill.group}</h3>
+							<p>{skill.items.join(' · ')}</p>
+						</div>
+					))
+				}
+			</div>
+		</section>
+
+		<section class="section" aria-labelledby="education-heading">
+			<div class="section-head">
+				<h2 id="education-heading" class="section-heading">Education</h2>
+			</div>
+			<Timeline items={education} />
+		</section>
+	</div>
+</BaseLayout>
+
+<style>
+	.bio {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25em;
+		max-width: var(--measure);
+		color: var(--color-prose);
+		font-size: 18px;
+		line-height: 1.7;
+	}
+	.about-actions {
+		margin-top: var(--space-6);
+	}
+	.skills {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+		gap: var(--space-5);
+	}
+	.skill-group {
+		margin-bottom: var(--space-2);
+		font-size: 16px;
+	}
+</style>
