@@ -45,4 +45,10 @@ describe('prose styles', () => {
 		expect(css).toMatch(/overflow-wrap:\s*anywhere/);
 		expect(css).toMatch(/\.astro-code[^}]*overflow-x:\s*auto/);
 	});
+
+	it('keep block spacing on blockquotes (a margin reset must not override `.prose > * + *`)', () => {
+		const css = cssText(page('/blog/building-this-site/'));
+		expect(css).toMatch(/\.prose blockquote\s*\{/);
+		expect(css).not.toMatch(/\.prose blockquote\s*\{[^}]*\bmargin:\s*0\s*[;}]/);
+	});
 });
