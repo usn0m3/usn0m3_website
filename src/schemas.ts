@@ -1,10 +1,5 @@
 import { z } from 'astro/zod';
 
-const yearMonth = z
-	.string()
-	.regex(/^\d{4}-(0[1-9]|1[0-2])$/, 'Use "YYYY-MM" in quotes, for example "2023-07"');
-const endYearMonth = z.union([yearMonth, z.literal('present')]);
-
 // Unquoted YAML dates arrive as Date objects; quoted ones as ISO strings.
 // No coercion: a blank value (null) or a bare number must fail, not become 1970.
 const contentDate = z
@@ -47,23 +42,4 @@ export const profileSchema = z.object({
 		github: z.url(),
 		linkedin: z.url().optional(),
 	}),
-	skills: z.array(z.object({ group: z.string().min(1), items: z.array(z.string()).min(1) })),
-	experience: z.array(
-		z.object({
-			company: z.string().min(1),
-			role: z.string().min(1),
-			start: yearMonth,
-			end: endYearMonth,
-			summary: z.string().min(1),
-			highlights: z.array(z.string()).default([]),
-		}),
-	),
-	education: z.array(
-		z.object({
-			school: z.string().min(1),
-			degree: z.string().min(1),
-			start: yearMonth,
-			end: endYearMonth,
-		}),
-	),
 });

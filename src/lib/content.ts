@@ -31,20 +31,12 @@ const dateFormat = new Intl.DateTimeFormat('en-US', {
 	timeZone: 'UTC',
 });
 
-const yearMonthFormat = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: 'short', timeZone: 'UTC' });
-
 export function formatDate(date: Date): string {
 	return dateFormat.format(date);
 }
 
 export function isoDate(date: Date): string {
 	return date.toISOString().slice(0, 10);
-}
-
-export function formatYearMonth(value: string): string {
-	if (value === 'present') return 'Present';
-	const [year, month] = value.split('-').map(Number);
-	return yearMonthFormat.format(new Date(Date.UTC(year, month - 1, 1)));
 }
 
 export function paragraphs(text: string): string[] {

@@ -8,7 +8,8 @@ describe('home page', () => {
 		expect(html).toContain('Built for speed. Engineered to last.');
 		expect(html).toContain('Software Engineer · Shanghai');
 		expect(html).toMatch(/<a href="\/projects\/" class="btn btn-primary"[^>]*>\s*View projects/);
-		expect(html).toMatch(/<a href="\/resume\.pdf" class="btn btn-outline"[^>]*download[^>]*>\s*Download résumé/);
+		expect(html).toMatch(/<a href="https:\/\/www\.linkedin\.com\/in\/your-profile" class="btn btn-outline"[^>]*>\s*LinkedIn/);
+		expect(html).not.toContain('résumé');
 		expect(html).toMatch(/href="mailto:hello@example\.com"[^>]*>\s*Get in touch →/);
 	});
 
@@ -36,7 +37,7 @@ describe('home page', () => {
 		expect(html).not.toContain('Unpublished draft ideas');
 	});
 
-	it('ships a résumé file', () => {
-		expect(exists('resume.pdf')).toBe(true);
+	it('no longer ships a résumé PDF', () => {
+		expect(exists('resume.pdf')).toBe(false);
 	});
 });

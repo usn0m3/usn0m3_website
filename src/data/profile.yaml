@@ -1,5 +1,5 @@
 # 个人信息，全站共用（首页、About 页、页脚）。
-# 年月一律写成带引号的 "YYYY-MM"；在职的 end 写 present。
+# 正式履历（经历、技能、教育）放在 LinkedIn 上，这里不写。
 name: Jane Doe
 role: Software Engineer
 location: Shanghai
@@ -12,30 +12,4 @@ bio: |
 email: hello@example.com
 links:
   github: https://github.com/usn0m3
-  linkedin: https://www.linkedin.com/in/your-profile
-skills:
-  - group: Languages
-    items: [TypeScript, Go, Python, SQL]
-  - group: Frontend
-    items: [React, Astro, CSS]
-  - group: Backend and infrastructure
-    items: [Node.js, PostgreSQL, Redis, Docker]
-experience:
-  - company: Acme Corp
-    role: Software Engineer
-    start: "2023-07"
-    end: present
-    summary: Building the real-time collaboration platform used by 40,000 teams.
-    highlights:
-      - Cut p95 API latency by 60% with a distributed cache layer.
-      - Led the migration from REST polling to WebSockets.
-  - company: Startup Inc
-    role: Software Engineering Intern
-    start: "2022-06"
-    end: "2022-09"
-    summary: Shipped internal tooling for the data team.
-education:
-  - school: Example University
-    degree: B.S. in Computer Science
-    start: "2019-09"
-    end: "2023-06"
+  linkedin: https://www.linkedin.com/in/your-profile # 没有就删掉这一行，LinkedIn 按钮会自动隐藏

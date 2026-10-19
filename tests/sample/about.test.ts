@@ -10,23 +10,16 @@ describe('about page', () => {
 		expect(html).toMatch(/<p[^>]*>Outside work I write/);
 	});
 
-	it('renders the experience timeline with formatted periods', () => {
-		expect(html).toContain('Acme Corp');
-		expect(html).toContain('Jul 2023 — Present');
-		expect(html).toContain('Jun 2022 — Sep 2022');
-		expect(html).toContain('Cut p95 API latency by 60% with a distributed cache layer.');
+	it('has no résumé sections — those live on LinkedIn', () => {
+		for (const heading of ['experience-heading', 'skills-heading', 'education-heading']) {
+			expect(html).not.toContain(`id="${heading}"`);
+		}
+		expect(html).not.toContain('résumé');
 	});
 
-	it('renders skills and education', () => {
-		expect(html).toContain('Backend and infrastructure');
-		expect(html).toContain('TypeScript · Go · Python · SQL');
-		expect(html).toContain('Example University');
-		expect(html).toContain('Sep 2019 — Jun 2023');
-	});
-
-	it('offers the résumé and email', () => {
-		expect(html).toMatch(/href="\/resume\.pdf"[^>]*download/);
-		expect(html).toContain('href="mailto:hello@example.com"');
+	it('offers email and LinkedIn', () => {
+		expect(html).toMatch(/<a href="mailto:hello@example\.com" class="btn btn-primary"/);
+		expect(html).toMatch(/<a href="https:\/\/www\.linkedin\.com\/in\/your-profile" class="btn btn-outline"[^>]*>\s*LinkedIn/);
 	});
 });
 

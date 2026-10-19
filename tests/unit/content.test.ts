@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
 	formatDate,
-	formatYearMonth,
 	isoDate,
 	paragraphs,
 	readingTime,
@@ -84,12 +83,6 @@ describe('date formatting', () => {
 
 	it('produces ISO calendar dates', () => {
 		expect(isoDate(new Date('2026-10-18'))).toBe('2026-10-18');
-	});
-
-	it('formats year-month values', () => {
-		expect(formatYearMonth('2023-07')).toBe('Jul 2023');
-		expect(formatYearMonth('2019-12')).toBe('Dec 2019');
-		expect(formatYearMonth('present')).toBe('Present');
 	});
 });
 

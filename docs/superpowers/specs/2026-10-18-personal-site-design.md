@@ -5,7 +5,7 @@
 
 ## 1. 目标
 
-一个**英文**的开发者个人网站，用于**求职 / 接活**。访客（招聘方、客户）能快速了解：你是谁、做过什么项目、怎么联系你或下载简历。
+一个**英文**的开发者个人网站，用于**求职 / 接活**。访客（招聘方、客户）能快速了解：你是谁、做过什么项目、怎么联系你（正式履历放在 LinkedIn）。
 
 **成功标准**
 
@@ -38,12 +38,12 @@
 
 | 路由 | 页面 | 内容 |
 |---|---|---|
-| `/` | 首页 | Hero 区：身份小标签（role · location）、大标题、简介；一个红色主按钮 *View Projects*、一个描边按钮 *Download Résumé*（规范要求每屏最多一主一辅），外加一个文字链接 *Get in touch →*（`mailto:`）。下面依次是精选项目（`featured: true`，按 `order` 排序，最多 3 个）和最新 3 篇文章 |
+| `/` | 首页 | Hero 区：身份小标签（role · location）、大标题、简介；一个红色主按钮 *View Projects*、一个描边按钮 *LinkedIn*（填了 `links.linkedin` 才显示；规范要求每屏最多一主一辅），外加一个文字链接 *Get in touch →*（`mailto:`）。下面依次是精选项目（`featured: true`，按 `order` 排序，最多 3 个）和最新 3 篇文章 |
 | `/projects/` | 项目列表 | 所有项目卡片，按 `order` 升序排列 |
 | `/projects/<slug>/` | 项目详情 | 标题、简介、技术栈、GitHub / Demo 链接、封面图、Markdown 正文 |
 | `/blog/` | 博客列表 | 已发布的文章按 `pubDate` 倒序排列，每条显示标题、日期、摘要、标签 |
 | `/blog/<slug>/` | 文章页 | 标题、日期（有更新时显示更新日期）、阅读时间、标签、正文 |
-| `/about/` | 关于 | 简介、技能分组、工作经历时间线、教育背景、简历下载、联系方式 |
+| `/about/` | 关于 | 自我介绍（`bio`）、*Email me* 按钮和 *LinkedIn* 按钮 |
 | `/404` | 404 | 提示页面不存在，并提供返回首页的链接 |
 | `/rss.xml` | RSS | 已发布文章 |
 | `/sitemap-index.xml` | sitemap | 自动生成 |
@@ -61,7 +61,6 @@ src/content/
   blog/<slug>.md  或  blog/<slug>/index.md（文件夹里可以放配图）
   projects/<slug>.md  或  projects/<slug>/index.md
 src/data/profile.yaml
-public/resume.pdf
 ```
 
 slug 取自文件名或文件夹名。
@@ -98,30 +97,17 @@ role: Software Engineer
 location: Shanghai
 headline: "Built for speed. Engineered to last."   # 首页大标题
 intro: "I build fast, reliable web apps…"          # 首页简介（1–3 句）
-bio: |                                              # About 页的详细介绍，支持 Markdown
+bio: |                                              # About 页的介绍，纯文本，空行分段
   …
 email: you@example.com
 links:
   github: https://github.com/usn0m3
-  linkedin: https://www.linkedin.com/in/…           # 可选
-skills:
-  - group: Languages
-    items: [TypeScript, Go, Python]
-experience:
-  - company: Acme
-    role: Software Engineer
-    start: 2023-07
-    end: present                                    # 或 YYYY-MM
-    summary: "…"
-    highlights: ["…", "…"]
-education:
-  - school: …
-    degree: …
-    start: 2019-09
-    end: 2023-06
+  linkedin: https://www.linkedin.com/in/…           # 可选；填了才显示 LinkedIn 按钮
 ```
 
-使用 `file()` loader 加载，并用 zod schema 校验：`email` 和 `links.*` 必须符合格式，`start` / `end` 必须是 `YYYY-MM` 或 `present`。
+使用 `file()` loader 加载，并用 zod schema 校验：`email` 和 `links.*` 必须符合格式。
+
+> 2026-10-18 修订：网站不放技能、工作经历、教育背景和简历 PDF。这些正式履历放在 LinkedIn 上，网站只保留自我介绍和 LinkedIn 链接，避免两处各维护一份。
 
 ### 阅读时间
 
@@ -179,14 +165,13 @@ src/
     Label.astro             大写小标签
     ProjectCard.astro
     PostListItem.astro
-    Timeline.astro          About 页的经历时间线
   pages/
     index.astro  404.astro  rss.xml.ts
     projects/index.astro  projects/[...slug].astro
     blog/index.astro      blog/[...slug].astro
     about.astro
 public/
-  resume.pdf（占位）  favicon.svg（红色方块）
+  favicon.svg（红色方块）
 .github/workflows/deploy.yml
 DESIGN.md
 ```
@@ -210,7 +195,6 @@ DESIGN.md
 | `cover` 指向的图片不存在 | 构建失败 |
 | 访问不存在的路径 | GitHub Pages 返回 `404.html` |
 | 没有任何已发布文章或精选项目 | 首页隐藏对应区块；列表页显示一行说明文字 |
-| `resume.pdf` 仍是占位文件 | 照常可以下载；README 里提醒替换 |
 
 ## 10. 测试与验证
 
@@ -227,5 +211,4 @@ DESIGN.md
 - 2 个示例项目（都设为 featured，其中 1 个带封面图）。
 - 1 篇示例文章，演示代码块、图片和标题层级。
 - 1 篇 `draft: true` 的示例草稿。
-- `resume.pdf`：一页占位 PDF。
 - `README.md`：用中文说明怎么写文章、加项目、改个人信息、本地预览和部署。

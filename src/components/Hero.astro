@@ -16,7 +16,13 @@ const { profile } = Astro.props;
 	<p class="intro">{profile.intro}</p>
 	<div class="actions hero-actions">
 		<Button href="/projects/">View projects</Button>
-		<Button href="/resume.pdf" variant="outline" download>Download résumé</Button>
+		{
+			profile.links.linkedin && (
+				<Button href={profile.links.linkedin} variant="outline">
+					LinkedIn
+				</Button>
+			)
+		}
 	</div>
 	<a class="contact" href={`mailto:${profile.email}`}>Get in touch →</a>
 </section>

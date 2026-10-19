@@ -13,10 +13,7 @@ const validProfile = {
 	intro: 'I build things.',
 	bio: 'Hello.',
 	email: 'hello@example.com',
-	links: { github: 'https://github.com/usn0m3' },
-	skills: [{ group: 'Languages', items: ['TypeScript'] }],
-	experience: [{ company: 'Acme', role: 'Engineer', start: '2023-07', end: 'present', summary: 'Work.' }],
-	education: [{ school: 'Uni', degree: 'B.S.', start: '2019-09', end: '2023-06' }],
+	links: { github: 'https://github.com/usn0m3', linkedin: 'https://www.linkedin.com/in/someone' },
 };
 
 describe('postSchema', () => {
@@ -77,9 +74,13 @@ describe('projectSchema', () => {
 });
 
 describe('profileSchema', () => {
-	it('accepts a valid profile and defaults highlights to []', () => {
-		const profile = profileSchema.parse(validProfile);
-		expect(profile.experience[0].highlights).toEqual([]);
+	it('accepts a profile with just identity, bio and links — no résumé sections', () => {
+		expect(profileSchema.parse(validProfile).name).toBe('Jane Doe');
+	});
+
+	it('makes LinkedIn optional', () => {
+		const { linkedin: _, ...githubOnly } = validProfile.links;
+		expect(profileSchema.safeParse({ ...validProfile, links: githubOnly }).success).toBe(true);
 	});
 
 	it('rejects an invalid email', () => {
@@ -90,17 +91,8 @@ describe('profileSchema', () => {
 		expect(profileSchema.safeParse({ ...validProfile, links: {} }).success).toBe(false);
 	});
 
-	it('rejects year-months that are not YYYY-MM, with a helpful message', () => {
-		const result = profileSchema.safeParse({
-			...validProfile,
-			experience: [{ ...validProfile.experience[0], start: '2023-7' }],
-		});
-		expect(result.success).toBe(false);
-		expect(JSON.stringify(result.error?.issues)).toContain('YYYY-MM');
-	});
-
-	it('allows "present" only as an end date', () => {
-		const badStart = { ...validProfile.experience[0], start: 'present' };
-		expect(profileSchema.safeParse({ ...validProfile, experience: [badStart] }).success).toBe(false);
+	it('rejects a LinkedIn value that is not a full URL', () => {
+		const links = { ...validProfile.links, linkedin: 'linkedin.com/in/someone' };
+		expect(profileSchema.safeParse({ ...validProfile, links }).success).toBe(false);
 	});
 });

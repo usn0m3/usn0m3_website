@@ -1,6 +1,6 @@
 # usn0m3.github.io
 
-个人网站：作品集、博客和简历。基于 Astro 构建，推送到 `main` 分支后会自动发布到 https://usn0m3.github.io 。
+个人网站：作品集和博客。基于 Astro 构建，推送到 `main` 分支后会自动发布到 https://usn0m3.github.io 。
 
 ## 本地预览
 
@@ -46,10 +46,9 @@ order: 1                                 # 数字越小越靠前
 ## Results
 ```
 
-## 修改个人信息和简历
+## 修改个人信息
 
-- 个人信息在 `src/data/profile.yaml`。年月要写成带引号的 `"2023-07"`，在职的结束时间写 `present`。
-- 简历：用你自己的 PDF 替换 `public/resume.pdf`，文件名保持不变。
+个人信息在 `src/data/profile.yaml`：名字、定位、首页标题、简介、About 页的介绍、邮箱、GitHub 和 LinkedIn。网站不放工作经历、技能和教育背景，这些放在 LinkedIn 上；首页和 About 页的 LinkedIn 按钮会链接过去。如果删掉 `linkedin` 那一行，按钮会自动隐藏。
 
 ## 发布
 
