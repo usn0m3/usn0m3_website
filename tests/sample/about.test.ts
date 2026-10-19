@@ -18,7 +18,7 @@ describe('about page', () => {
 	});
 
 	it('offers email and LinkedIn', () => {
-		expect(html).toMatch(/<a href="mailto:fanpincheng@gmail.com" class="btn btn-primary"/);
+		expect(html).toMatch(/<a href="mailto:geneptcf.showplace465@simplelogin.com" class="btn btn-primary"/);
 		expect(html).toMatch(/<a href="https:\/\/www\.linkedin\.com\/in\/pincheng-fan-69298a42a" class="btn btn-outline"[^>]*>\s*LinkedIn/);
 	});
 });

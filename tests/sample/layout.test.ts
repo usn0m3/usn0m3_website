@@ -29,7 +29,7 @@ describe('base layout', () => {
 
 	it('renders the footer links and a skip link', () => {
 		expect(html).toContain('href="https://github.com/usn0m3"');
-		expect(html).toContain('href="mailto:fanpincheng@gmail.com"');
+		expect(html).toContain('href="mailto:geneptcf.showplace465@simplelogin.com"');
 		expect(html).toContain('href="#main"');
 	});
 });

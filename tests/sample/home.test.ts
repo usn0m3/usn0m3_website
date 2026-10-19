@@ -10,7 +10,7 @@ describe('home page', () => {
 		expect(html).toMatch(/<a href="\/projects\/" class="btn btn-primary"[^>]*>\s*View projects/);
 		expect(html).toMatch(/<a href="https:\/\/www\.linkedin\.com\/in\/pincheng-fan-69298a42a" class="btn btn-outline"[^>]*>\s*LinkedIn/);
 		expect(html).not.toContain('résumé');
-		expect(html).toMatch(/href="mailto:fanpincheng@gmail.com"[^>]*>\s*Get in touch →/);
+		expect(html).toMatch(/href="mailto:geneptcf.showplace465@simplelogin.com"[^>]*>\s*Get in touch →/);
 	});
 
 	it('shows featured projects only, in order', () => {
