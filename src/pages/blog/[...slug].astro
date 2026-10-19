@@ -1,0 +1,42 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import Label from '../../components/Label.astro';
+import ProseLayout from '../../layouts/ProseLayout.astro';
+import { getPosts, type Post } from '../../lib/collections';
+import { formatDate, isoDate, readingTime } from '../../lib/content';
+
+export const getStaticPaths = (async () => {
+	const posts = await getPosts();
+	return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+	post: Post;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, updatedDate, tags } = post.data;
+const minutes = readingTime(post.body);
+const { Content } = await render(post);
+---
+
+<ProseLayout title={title} description={description}>
+	<Fragment slot="header">
+		<div class="article-meta">
+			<Label><time datetime={isoDate(pubDate)}>{formatDate(pubDate)}</time></Label>
+			{
+				updatedDate && (
+					<Label>
+						Updated <time datetime={isoDate(updatedDate)}>{formatDate(updatedDate)}</time>
+					</Label>
+				)
+			}
+			<Label>{minutes} min read</Label>
+		</div>
+		<h1 class="article-title">{title}</h1>
+		<p class="article-lede">{description}</p>
+		{tags.length > 0 && <Label>{tags.map((tag) => `#${tag}`).join(' ')}</Label>}
+	</Fragment>
+	<Content />
+</ProseLayout>
