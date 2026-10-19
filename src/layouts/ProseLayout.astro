@@ -1,0 +1,23 @@
+---
+import '../styles/prose.css';
+import BaseLayout from './BaseLayout.astro';
+
+interface Props {
+	title: string;
+	description: string;
+	type?: 'website' | 'article';
+}
+
+const { title, description, type = 'article' } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} type={type}>
+	<article class="container article">
+		<header class="article-header">
+			<slot name="header" />
+		</header>
+		<div class="prose">
+			<slot />
+		</div>
+	</article>
+</BaseLayout>

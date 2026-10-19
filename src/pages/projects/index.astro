@@ -1,0 +1,25 @@
+---
+import ProjectCard from '../../components/ProjectCard.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getProjects } from '../../lib/collections';
+
+const projects = await getProjects();
+---
+
+<BaseLayout title="Projects" description="Selected software projects, with the problem, approach and results for each.">
+	<div class="container">
+		<header class="page-header">
+			<h1 class="page-title">Projects</h1>
+			<p class="page-intro">Things I've designed, built and shipped.</p>
+		</header>
+		{
+			projects.length > 0 ? (
+				<div class="grid-cards">
+					{projects.map((project) => <ProjectCard project={project} headingLevel="h2" />)}
+				</div>
+			) : (
+				<p class="empty">Projects are on the way.</p>
+			)
+		}
+	</div>
+</BaseLayout>

@@ -1,0 +1,55 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import Button from '../../components/Button.astro';
+import Label from '../../components/Label.astro';
+import ProseLayout from '../../layouts/ProseLayout.astro';
+import { getProjects, type Project } from '../../lib/collections';
+
+export const getStaticPaths = (async () => {
+	const projects = await getProjects();
+	return projects.map((project) => ({ params: { slug: project.id }, props: { project } }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+	project: Project;
+}
+
+const { project } = Astro.props;
+const { title, summary, stack, repo, demo, cover } = project.data;
+const { Content } = await render(project);
+---
+
+<ProseLayout title={title} description={summary}>
+	<Fragment slot="header">
+		<Label>Project</Label>
+		<h1 class="article-title">{title}</h1>
+		<p class="article-lede">{summary}</p>
+		<Label>{stack.join(' · ')}</Label>
+		{
+			(repo || demo) && (
+				<div class="article-actions">
+					{demo && <Button href={demo}>Live demo</Button>}
+					{repo && (
+						<Button href={repo} variant="outline">
+							Source code
+						</Button>
+					)}
+				</div>
+			)
+		}
+		{
+			cover && (
+				<Image
+					class="article-cover"
+					src={cover}
+					alt={`Screenshot of ${title}`}
+					widths={[800, 1280, 1920]}
+					sizes="(max-width: 1280px) 100vw, 1280px"
+				/>
+			)
+		}
+	</Fragment>
+	<Content />
+</ProseLayout>
