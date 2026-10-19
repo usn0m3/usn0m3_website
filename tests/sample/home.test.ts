@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { between, exists, page } from './helpers';
+import { between, exists, page } from '../build/helpers';
 
 describe('home page', () => {
 	const html = page('/');

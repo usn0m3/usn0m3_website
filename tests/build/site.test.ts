@@ -1,5 +1,8 @@
+// Content-agnostic checks: these run in CI and must hold for any content the
+// site owner adds. Checks tied to the starter content live in tests/sample.
 import { describe, expect, it } from 'vitest';
 import { exists, htmlFiles, read } from './helpers';
+import { SITE, sourceEntries } from './source';
 
 /** Map an internal URL to the file GitHub Pages would serve for it. */
 function targetFile(url: string): string {
@@ -18,19 +21,18 @@ function internalUrls(html: string): string[] {
 	return urls.filter((url) => url.startsWith('/') && !url.startsWith('//'));
 }
 
-describe('whole site', () => {
-	const pages = htmlFiles();
+const pages = htmlFiles();
+const rss = read('rss.xml');
+const sitemap = read('sitemap-0.xml');
+const posts = sourceEntries('blog');
+const projects = sourceEntries('projects');
 
-	it('builds every expected route', () => {
+describe('routes', () => {
+	it('builds the fixed pages, feed and sitemap', () => {
 		for (const file of [
 			'index.html',
 			'projects/index.html',
-			'projects/task-manager/index.html',
-			'projects/edge-cache/index.html',
-			'projects/cli-toolkit/index.html',
 			'blog/index.html',
-			'blog/building-this-site/index.html',
-			'blog/notes-on-testing/index.html',
 			'about/index.html',
 			'404.html',
 			'rss.xml',
@@ -40,6 +42,38 @@ describe('whole site', () => {
 		}
 	});
 
+	it('builds a page for every project', () => {
+		for (const project of projects) {
+			expect(exists(`projects/${project.slug}/index.html`), project.file).toBe(true);
+		}
+	});
+
+	it('publishes every non-draft post as a page, a feed item and a sitemap entry', () => {
+		for (const post of posts.filter((p) => !p.draft)) {
+			const url = `${SITE}/blog/${post.slug}/`;
+			expect(exists(`blog/${post.slug}/index.html`), post.file).toBe(true);
+			expect(rss, post.file).toContain(`<link>${url}</link>`);
+			expect(sitemap, post.file).toContain(`<loc>${url}</loc>`);
+		}
+	});
+
+	it('never publishes drafts', () => {
+		for (const post of posts.filter((p) => p.draft)) {
+			expect(exists(`blog/${post.slug}/index.html`), post.file).toBe(false);
+			expect(rss, post.file).not.toContain(`/blog/${post.slug}/`);
+			expect(sitemap, post.file).not.toContain(`/blog/${post.slug}/`);
+			for (const file of pages) {
+				expect(read(file), `${post.file} in ${file}`).not.toContain(`href="/blog/${post.slug}/"`);
+			}
+		}
+	});
+
+	it('keeps the 404 page out of the sitemap', () => {
+		expect(sitemap).not.toContain(`<loc>${SITE}/404/</loc>`);
+	});
+});
+
+describe('links', () => {
 	it('has no broken internal links or assets', () => {
 		const broken: string[] = [];
 		for (const file of pages) {
@@ -50,24 +84,37 @@ describe('whole site', () => {
 		expect(broken).toEqual([]);
 	});
 
+	it('points every feed item at a page that exists', () => {
+		const links = [...rss.matchAll(/<item>[\s\S]*?<link>([^<]+)<\/link>/g)].map((m) => m[1]);
+		for (const link of links) {
+			expect(link.startsWith(`${SITE}/`), link).toBe(true);
+			expect(exists(targetFile(link.slice(SITE.length))), link).toBe(true);
+		}
+	});
+});
+
+describe('every page', () => {
 	it('ships no client-side JavaScript', () => {
 		for (const file of pages) {
 			expect(read(file), file).not.toContain('<script');
 		}
 	});
 
-	it('never renders empty or undefined attributes', () => {
+	it('never renders empty or undefined link attributes', () => {
 		for (const file of pages) {
 			const html = read(file);
 			expect(html, file).not.toMatch(/\b(href|src)=""/);
-			expect(html, file).not.toContain('undefined');
+			expect(html, file).not.toMatch(/="undefined"/);
 		}
 	});
 
-	it('lists real pages in the sitemap, without the 404 page', () => {
-		const sitemap = read('sitemap-0.xml');
-		expect(sitemap).toContain('<loc>https://usn0m3.github.io/blog/building-this-site/</loc>');
-		expect(sitemap).toContain('<loc>https://usn0m3.github.io/about/</loc>');
-		expect(sitemap).not.toContain('404');
+	it('has language, title, description and canonical URL', () => {
+		for (const file of pages) {
+			const html = read(file);
+			expect(html, file).toContain('<html lang="en"');
+			expect(html, file).toMatch(/<title>[^<]+<\/title>/);
+			expect(html, file).toMatch(/<meta name="description" content="[^"]+"/);
+			expect(html, file).toMatch(new RegExp(`<link rel="canonical" href="${SITE.replace(/\./g, '\\.')}/`));
+		}
 	});
 });

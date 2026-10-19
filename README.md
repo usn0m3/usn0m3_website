@@ -66,6 +66,12 @@ git push
 
 报错信息会指出出错的文件和字段，例如 `blog → my-post` 的 `title: Required`。按提示改好后重新推送即可。构建失败期间，线上会保留上一个能正常构建的版本。
 
+## 测试
+
+- `npm test`：单元测试，覆盖排序、日期格式化和内容校验规则。
+- `npm run test:build`：检查构建结果，适用于任何内容（死链、草稿是否泄漏、RSS、sitemap、每页的 SEO 信息）。CI 每次部署前都会运行。
+- `npm run test:sample`：只针对仓库自带的示例内容（Jane Doe、示例文章和项目）。把这些换成你自己的内容后，这组测试会失败，属于正常现象，可以直接删除 `tests/sample/` 文件夹。CI 不会运行这组测试。
+
 ## 设计
 
 视觉规范见 `DESIGN.md`（基于 Ferrari 的设计语言），颜色和间距定义在 `src/styles/tokens.css`。

@@ -4,7 +4,7 @@ import { defineConfig, fontProviders } from 'astro/config';
 
 export default defineConfig({
 	site: 'https://usn0m3.github.io',
-	integrations: [sitemap({ filter: (page) => !page.includes('/404') })],
+	integrations: [sitemap({ filter: (page) => new URL(page).pathname !== '/404/' })],
 	fonts: [
 		{
 			provider: fontProviders.fontsource(),

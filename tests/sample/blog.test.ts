@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { exists, htmlFiles, page, read } from './helpers';
+import { exists, htmlFiles, page, read } from '../build/helpers';
 
 describe('blog index', () => {
 	const html = page('/blog/');

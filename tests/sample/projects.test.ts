@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { cssText, page } from './helpers';
+import { cssText, page } from '../build/helpers';
 
 describe('projects index', () => {
 	const html = page('/projects/');
