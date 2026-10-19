@@ -69,7 +69,7 @@ git push
 
 - `npm test`：单元测试，覆盖排序、日期格式化和内容校验规则。
 - `npm run test:build`：检查构建结果，适用于任何内容（死链、草稿是否泄漏、RSS、sitemap、每页的 SEO 信息）。CI 每次部署前都会运行。
-- `npm run test:sample`：只针对仓库自带的示例内容（Jane Doe、示例文章和项目）。把这些换成你自己的内容后，这组测试会失败，属于正常现象，可以直接删除 `tests/sample/` 文件夹。CI 不会运行这组测试。
+项目和博客暂时为空时也能正常构建：首页会隐藏对应区块（Hero 区也不会显示 View projects 按钮），列表页会显示“即将更新”的提示。`src/content/blog/` 和 `src/content/projects/` 里的 `.gitkeep` 用来让 git 保留这两个空文件夹，加了内容之后也不用删。
 
 ## 设计
 

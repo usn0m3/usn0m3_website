@@ -3,14 +3,19 @@ import Hero from '../components/Hero.astro';
 import PostListItem from '../components/PostListItem.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getFeaturedProjects, getPosts, getProfile } from '../lib/collections';
+import { getFeaturedProjects, getPosts, getProfile, getProjects } from '../lib/collections';
 
-const [profile, featured, posts] = await Promise.all([getProfile(), getFeaturedProjects(3), getPosts()]);
+const [profile, projects, featured, posts] = await Promise.all([
+	getProfile(),
+	getProjects(),
+	getFeaturedProjects(3),
+	getPosts(),
+]);
 const latest = posts.slice(0, 3);
 ---
 
 <BaseLayout>
-	<Hero profile={profile} />
+	<Hero profile={profile} hasProjects={projects.length > 0} />
 	{
 		featured.length > 0 && (
 			<section class="container section" aria-labelledby="featured-heading">

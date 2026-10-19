@@ -1,5 +1,5 @@
 // Content-agnostic checks: these run in CI and must hold for any content the
-// site owner adds. Checks tied to the starter content live in tests/sample.
+// site owner adds, including none at all.
 import { describe, expect, it } from 'vitest';
 import { exists, htmlFiles, read } from './helpers';
 import { SITE, sourceEntries } from './source';
@@ -70,6 +70,27 @@ describe('routes', () => {
 
 	it('keeps the 404 page out of the sitemap', () => {
 		expect(sitemap).not.toContain(`<loc>${SITE}/404/</loc>`);
+	});
+});
+
+describe('empty states', () => {
+	const home = read('index.html');
+	const published = posts.filter((p) => !p.draft);
+
+	it('only promotes the projects page from the hero when there are projects', () => {
+		const heroCta = /<a href="\/projects\/" class="btn btn-primary"/;
+		if (projects.length > 0) expect(home).toMatch(heroCta);
+		else expect(home).not.toMatch(heroCta);
+	});
+
+	it('hides home sections that would be empty', () => {
+		if (projects.length === 0) expect(home).not.toContain('id="featured-heading"');
+		if (published.length === 0) expect(home).not.toContain('id="latest-heading"');
+	});
+
+	it('explains empty list pages instead of rendering nothing', () => {
+		if (projects.length === 0) expect(read('projects/index.html')).toContain('class="empty"');
+		if (published.length === 0) expect(read('blog/index.html')).toContain('class="empty"');
 	});
 });
 
