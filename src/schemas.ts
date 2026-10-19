@@ -5,11 +5,19 @@ const yearMonth = z
 	.regex(/^\d{4}-(0[1-9]|1[0-2])$/, 'Use "YYYY-MM" in quotes, for example "2023-07"');
 const endYearMonth = z.union([yearMonth, z.literal('present')]);
 
+// Unquoted YAML dates arrive as Date objects; quoted ones as ISO strings.
+// No coercion: a blank value (null) or a bare number must fail, not become 1970.
+const contentDate = z
+	.union([z.date(), z.iso.date(), z.iso.datetime({ offset: true })], {
+		error: 'Use a date like 2026-10-18',
+	})
+	.transform((value) => (value instanceof Date ? value : new Date(value)));
+
 export const postSchema = z.object({
 	title: z.string().min(1),
 	description: z.string().min(1),
-	pubDate: z.coerce.date(),
-	updatedDate: z.coerce.date().optional(),
+	pubDate: contentDate,
+	updatedDate: contentDate.optional(),
 	tags: z.array(z.string()).default([]),
 	draft: z.boolean().default(false),
 });

@@ -35,6 +35,25 @@ describe('postSchema', () => {
 	it('rejects a date that cannot be parsed', () => {
 		expect(postSchema.safeParse({ title: 'T', description: 'D', pubDate: 'yesterday' }).success).toBe(false);
 	});
+
+	it('rejects a blank date instead of turning it into 1970', () => {
+		// `pubDate:` with nothing after it is YAML null.
+		expect(postSchema.safeParse({ title: 'T', description: 'D', pubDate: null }).success).toBe(false);
+		expect(
+			postSchema.safeParse({ title: 'T', description: 'D', pubDate: '2026-10-18', updatedDate: null }).success,
+		).toBe(false);
+	});
+
+	it('rejects a bare number such as a year', () => {
+		expect(postSchema.safeParse({ title: 'T', description: 'D', pubDate: 2026 }).success).toBe(false);
+	});
+
+	it('accepts YAML dates (Date objects) and ISO date-time strings', () => {
+		const fromYaml = postSchema.parse({ title: 'T', description: 'D', pubDate: new Date('2026-10-18') });
+		expect(fromYaml.pubDate.toISOString()).toBe('2026-10-18T00:00:00.000Z');
+		const withTime = postSchema.parse({ title: 'T', description: 'D', pubDate: '2026-10-18T09:30:00+08:00' });
+		expect(withTime.pubDate.toISOString()).toBe('2026-10-18T01:30:00.000Z');
+	});
 });
 
 describe('projectSchema', () => {
