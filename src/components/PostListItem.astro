@@ -1,6 +1,7 @@
 ---
 import type { Post } from '../lib/collections';
 import { formatDate, isoDate } from '../lib/content';
+import { url } from '../lib/url';
 import Label from './Label.astro';
 
 interface Props {
@@ -16,7 +17,7 @@ const { title, description, pubDate, tags, draft } = post.data;
 <article class="post-item">
 	<time datetime={isoDate(pubDate)}>{formatDate(pubDate)}</time>
 	<div class="body">
-		<Heading class="title"><a href={`/blog/${post.id}/`}>{title}</a></Heading>
+		<Heading class="title"><a href={url(`/blog/${post.id}/`)}>{title}</a></Heading>
 		<p class="description">{description}</p>
 		{(tags.length > 0 || draft) && <Label>{[draft ? 'Draft' : '', ...tags].filter(Boolean).join(' · ')}</Label>}
 	</div>

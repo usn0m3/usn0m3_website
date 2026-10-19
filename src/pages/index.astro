@@ -4,6 +4,7 @@ import PostListItem from '../components/PostListItem.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { getFeaturedProjects, getPosts, getProfile, getProjects } from '../lib/collections';
+import { url } from '../lib/url';
 
 const [profile, projects, featured, posts] = await Promise.all([
 	getProfile(),
@@ -21,7 +22,7 @@ const latest = posts.slice(0, 3);
 			<section class="container section" aria-labelledby="featured-heading">
 				<div class="section-head">
 					<h2 id="featured-heading" class="section-heading">Featured projects</h2>
-					<a class="section-link" href="/projects/">All projects →</a>
+					<a class="section-link" href={url('/projects/')}>All projects →</a>
 				</div>
 				<div class="grid-cards">
 					{featured.map((project) => <ProjectCard project={project} />)}
@@ -34,7 +35,7 @@ const latest = posts.slice(0, 3);
 			<section class="container section" aria-labelledby="latest-heading">
 				<div class="section-head">
 					<h2 id="latest-heading" class="section-heading">Latest writing</h2>
-					<a class="section-link" href="/blog/">All posts →</a>
+					<a class="section-link" href={url('/blog/')}>All posts →</a>
 				</div>
 				{latest.map((post) => <PostListItem post={post} />)}
 			</section>

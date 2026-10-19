@@ -180,10 +180,10 @@ DESIGN.md
 
 ## 8. 部署
 
-- 仓库为 `usn0m3/usn0m3.github.io`，`astro.config.mjs` 中设置 `site: 'https://usn0m3.github.io'`，不需要设置 `base`。
+- 仓库为 `usn0m3/usn0m3_website`（2026-10-18 由用户从 `usn0m3.github.io` 改名），网站地址为 https://usn0m3.github.io/usn0m3_website/ 。`astro.config.mjs` 中设置 `site: 'https://usn0m3.github.io'` 和 `base: '/usn0m3_website'`；所有站内链接都通过 `src/lib/url.ts` 的 `url()` 生成，CI 的死链检查会拒绝漏掉 base 的链接。根地址 https://usn0m3.github.io/ 因此不再属于本站。
 - `.github/workflows/deploy.yml`：推送到 `main` 时触发，依次执行 checkout → `withastro/action`（安装依赖、运行 `astro check`、build）→ `actions/deploy-pages`。
 - `.gitignore`：`node_modules/`、`dist/`、`.astro/`、`design-refs/`。
-- **由 Claude 通过 `gh` 完成（用户已登录 usn0m3）：**创建公开仓库 `usn0m3.github.io`；推送代码；把 Pages 的构建来源设为 GitHub Actions（`gh api` 调用 `POST /repos/usn0m3/usn0m3.github.io/pages`，参数 `build_type=workflow`）。创建仓库和每次推送前都会先征求用户同意。
+- **由 Claude 通过 `gh` 完成（用户已登录 usn0m3）：**创建公开仓库（现名 `usn0m3_website`）；推送代码；把 Pages 的构建来源设为 GitHub Actions（`gh api` 调用 `POST /repos/usn0m3/<repo>/pages`，参数 `build_type=workflow`）。创建仓库和每次推送前都会先征求用户同意。
 - 推送到远程前会先征求用户同意。
 
 ## 9. 出错处理

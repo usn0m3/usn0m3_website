@@ -2,13 +2,18 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 import { slug as githubSlug } from 'github-slugger';
 
+const config = readFileSync(join(process.cwd(), 'astro.config.mjs'), 'utf8');
+
 /** The `site` URL from astro.config.mjs, without a trailing slash. */
 export const SITE = (() => {
-	const config = readFileSync(join(process.cwd(), 'astro.config.mjs'), 'utf8');
 	const match = config.match(/site:\s*['"]([^'"]+)['"]/);
 	if (!match) throw new Error('Could not find `site` in astro.config.mjs');
 	return match[1].replace(/\/+$/, '');
 })();
+
+/** The `base` path from astro.config.mjs, e.g. "/usn0m3_website", or "" when the site lives at the root. */
+// Matches `const base = '/x'` or `base: '/x'`.
+export const BASE = (config.match(/\bbase\s*[:=]\s*['"]([^'"]*)['"]/)?.[1] ?? '').replace(/\/+$/, '');
 
 export interface SourceEntry {
 	file: string;

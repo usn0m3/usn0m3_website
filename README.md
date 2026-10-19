@@ -1,12 +1,12 @@
-# usn0m3.github.io
+# usn0m3_website
 
-个人网站：作品集和博客。基于 Astro 构建，推送到 `main` 分支后会自动发布到 https://usn0m3.github.io 。
+个人网站：作品集和博客。基于 Astro 构建，推送到 `main` 分支后会自动发布到 https://usn0m3.github.io/usn0m3_website/ 。
 
 ## 本地预览
 
 ```bash
 npm install      # 第一次运行时需要
-npm run dev      # 打开 http://localhost:4321 ，改完文件页面会自动刷新
+npm run dev      # 打开 http://localhost:4321/usn0m3_website/ ，改完文件页面会自动刷新
 ```
 
 ## 写一篇文章
@@ -69,8 +69,15 @@ git push
 
 - `npm test`：单元测试，覆盖排序、日期格式化和内容校验规则。
 - `npm run test:build`：检查构建结果，适用于任何内容（死链、草稿是否泄漏、RSS、sitemap、每页的 SEO 信息）。CI 每次部署前都会运行。
+
 项目和博客暂时为空时也能正常构建：首页会隐藏对应区块（Hero 区也不会显示 View projects 按钮），列表页会显示“即将更新”的提示。`src/content/blog/` 和 `src/content/projects/` 里的 `.gitkeep` 用来让 git 保留这两个空文件夹，加了内容之后也不用删。
 
 ## 设计
 
 视觉规范见 `DESIGN.md`（基于 Ferrari 的设计语言），颜色和间距定义在 `src/styles/tokens.css`。
+
+## 网址和子路径
+
+仓库名是 `usn0m3_website`，所以 GitHub Pages 把网站放在子路径 `/usn0m3_website/` 下。`astro.config.mjs` 里的 `base` 就是这个子路径。站内链接一律写成 `url('/about/')` 的形式（来自 `src/lib/url.ts`），不要直接写 `/about/`，否则会漏掉子路径而导致 404。CI 的死链检查会拦住这种错误。
+
+如果以后把仓库改名，或者绑定了自己的域名，只需要改 `astro.config.mjs` 里的 `base`（用自己的域名时改成 `''`，同时把 `site` 改成新域名）。

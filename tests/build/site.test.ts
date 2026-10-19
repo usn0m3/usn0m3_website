@@ -2,14 +2,28 @@
 // site owner adds, including none at all.
 import { describe, expect, it } from 'vitest';
 import { exists, htmlFiles, read } from './helpers';
-import { SITE, sourceEntries } from './source';
+import { BASE, SITE, sourceEntries } from './source';
 
-/** Map an internal URL to the file GitHub Pages would serve for it. */
-function targetFile(url: string): string {
-	const path = decodeURI(url.split(/[?#]/)[0]);
+/** Public URL of the site root, e.g. https://usn0m3.github.io/usn0m3_website */
+const ROOT = `${SITE}${BASE}`;
+
+/**
+ * Map an internal URL to the dist/ file GitHub Pages would serve for it.
+ * Returns null for root-relative URLs that skip the base path: on a project
+ * site those point outside the site and always 404.
+ */
+function targetFile(url: string): string | null {
+	const full = decodeURI(url.split(/[?#]/)[0]);
+	if (BASE && full !== BASE && !full.startsWith(`${BASE}/`)) return null;
+	const path = full.slice(BASE.length) || '/';
 	if (path.endsWith('/')) return `${path.slice(1)}index.html`;
 	if (/\.[a-z0-9]+$/i.test(path)) return path.slice(1);
 	return `${path.slice(1)}/index.html`;
+}
+
+function resolves(url: string): boolean {
+	const file = targetFile(url);
+	return file !== null && exists(file);
 }
 
 function internalUrls(html: string): string[] {
@@ -50,7 +64,7 @@ describe('routes', () => {
 
 	it('publishes every non-draft post as a page, a feed item and a sitemap entry', () => {
 		for (const post of posts.filter((p) => !p.draft)) {
-			const url = `${SITE}/blog/${post.slug}/`;
+			const url = `${ROOT}/blog/${post.slug}/`;
 			expect(exists(`blog/${post.slug}/index.html`), post.file).toBe(true);
 			expect(rss, post.file).toContain(`<link>${url}</link>`);
 			expect(sitemap, post.file).toContain(`<loc>${url}</loc>`);
@@ -63,13 +77,13 @@ describe('routes', () => {
 			expect(rss, post.file).not.toContain(`/blog/${post.slug}/`);
 			expect(sitemap, post.file).not.toContain(`/blog/${post.slug}/`);
 			for (const file of pages) {
-				expect(read(file), `${post.file} in ${file}`).not.toContain(`href="/blog/${post.slug}/"`);
+				expect(read(file), `${post.file} in ${file}`).not.toContain(`/blog/${post.slug}/"`);
 			}
 		}
 	});
 
 	it('keeps the 404 page out of the sitemap', () => {
-		expect(sitemap).not.toContain(`<loc>${SITE}/404/</loc>`);
+		expect(sitemap).not.toContain(`<loc>${ROOT}/404/</loc>`);
 	});
 });
 
@@ -78,9 +92,9 @@ describe('empty states', () => {
 	const published = posts.filter((p) => !p.draft);
 
 	it('only promotes the projects page from the hero when there are projects', () => {
-		const heroCta = /<a href="\/projects\/" class="btn btn-primary"/;
-		if (projects.length > 0) expect(home).toMatch(heroCta);
-		else expect(home).not.toMatch(heroCta);
+		const heroCta = `<a href="${BASE}/projects/" class="btn btn-primary"`;
+		if (projects.length > 0) expect(home).toContain(heroCta);
+		else expect(home).not.toContain(heroCta);
 	});
 
 	it('hides home sections that would be empty', () => {
@@ -95,21 +109,26 @@ describe('empty states', () => {
 });
 
 describe('links', () => {
-	it('has no broken internal links or assets', () => {
+	it('has no broken internal links or assets (all under the base path)', () => {
 		const broken: string[] = [];
 		for (const file of pages) {
 			for (const url of internalUrls(read(file))) {
-				if (!exists(targetFile(url))) broken.push(`${file} -> ${url}`);
+				if (!resolves(url)) broken.push(`${file} -> ${url}`);
 			}
 		}
 		expect(broken).toEqual([]);
 	});
 
+	it('points the feed itself at the site home, not the bare domain', () => {
+		const channelLink = rss.match(/<channel>[\s\S]*?<link>([^<]+)<\/link>/)?.[1];
+		expect(channelLink).toBe(`${ROOT}/`);
+	});
+
 	it('points every feed item at a page that exists', () => {
 		const links = [...rss.matchAll(/<item>[\s\S]*?<link>([^<]+)<\/link>/g)].map((m) => m[1]);
 		for (const link of links) {
-			expect(link.startsWith(`${SITE}/`), link).toBe(true);
-			expect(exists(targetFile(link.slice(SITE.length))), link).toBe(true);
+			expect(link.startsWith(`${ROOT}/`), link).toBe(true);
+			expect(resolves(link.slice(SITE.length)), link).toBe(true);
 		}
 	});
 });
@@ -130,12 +149,13 @@ describe('every page', () => {
 	});
 
 	it('has language, title, description and canonical URL', () => {
+		const canonical = `<link rel="canonical" href="${ROOT}/`;
 		for (const file of pages) {
 			const html = read(file);
 			expect(html, file).toContain('<html lang="en"');
 			expect(html, file).toMatch(/<title>[^<]+<\/title>/);
 			expect(html, file).toMatch(/<meta name="description" content="[^"]+"/);
-			expect(html, file).toMatch(new RegExp(`<link rel="canonical" href="${SITE.replace(/\./g, '\\.')}/`));
+			expect(html, file).toContain(canonical);
 		}
 	});
 });

@@ -1,5 +1,6 @@
 ---
 import type { Profile } from '../lib/collections';
+import { url } from '../lib/url';
 import Button from './Button.astro';
 import Label from './Label.astro';
 
@@ -20,7 +21,7 @@ const linkedin = profile.links.linkedin;
 	{
 		(hasProjects || linkedin) && (
 			<div class="actions hero-actions">
-				{hasProjects && <Button href="/projects/">View projects</Button>}
+				{hasProjects && <Button href={url('/projects/')}>View projects</Button>}
 				{linkedin && (
 					<Button href={linkedin} variant={hasProjects ? 'outline' : 'primary'}>
 						LinkedIn

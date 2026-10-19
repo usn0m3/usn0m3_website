@@ -1,4 +1,6 @@
 ---
+import { url } from '../lib/url';
+
 interface Props {
 	name: string;
 }
@@ -6,15 +8,15 @@ interface Props {
 const { name } = Astro.props;
 const path = Astro.url.pathname;
 const links = [
-	{ href: '/projects/', label: 'Projects' },
-	{ href: '/blog/', label: 'Blog' },
-	{ href: '/about/', label: 'About' },
+	{ href: url('/projects/'), label: 'Projects' },
+	{ href: url('/blog/'), label: 'Blog' },
+	{ href: url('/about/'), label: 'About' },
 ];
 ---
 
 <header class="site-header">
 	<div class="container bar">
-		<a class="brand" href="/"><span class="mark" aria-hidden="true"></span>{name}</a>
+		<a class="brand" href={url('/')}><span class="mark" aria-hidden="true"></span>{name}</a>
 		<nav aria-label="Main">
 			<ul>
 				{

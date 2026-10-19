@@ -1,5 +1,6 @@
 ---
 import type { Profile } from '../lib/collections';
+import { url } from '../lib/url';
 
 interface Props {
 	profile: Profile;
@@ -11,7 +12,7 @@ const links = [
 	{ href: profile.links.github, label: 'GitHub' },
 	...(profile.links.linkedin ? [{ href: profile.links.linkedin, label: 'LinkedIn' }] : []),
 	{ href: `mailto:${profile.email}`, label: 'Email' },
-	{ href: '/rss.xml', label: 'RSS' },
+	{ href: url('/rss.xml'), label: 'RSS' },
 ];
 ---
 

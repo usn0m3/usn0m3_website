@@ -2,9 +2,14 @@
 import sitemap from '@astrojs/sitemap';
 import { defineConfig, fontProviders } from 'astro/config';
 
+// GitHub Pages serves a repo not named <user>.github.io under /<repo>/.
+// Change or remove this if the repo is renamed or a custom domain is added.
+const base = '/usn0m3_website';
+
 export default defineConfig({
 	site: 'https://usn0m3.github.io',
-	integrations: [sitemap({ filter: (page) => new URL(page).pathname !== '/404/' })],
+	base: base,
+	integrations: [sitemap({ filter: (page) => new URL(page).pathname !== `${base}/404/` })],
 	fonts: [
 		{
 			provider: fontProviders.fontsource(),

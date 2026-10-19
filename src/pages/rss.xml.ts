@@ -1,6 +1,7 @@
 import rss from '@astrojs/rss';
 import type { APIContext } from 'astro';
 import { getPosts, getProfile } from '../lib/collections';
+import { url } from '../lib/url';
 
 export async function GET(context: APIContext) {
 	if (!context.site) throw new Error('Set `site` in astro.config.mjs to generate the RSS feed.');
@@ -8,13 +9,14 @@ export async function GET(context: APIContext) {
 	return rss({
 		title: `${profile.name} — Blog`,
 		description: profile.intro,
-		site: context.site,
+		// The feed's home link and item links resolve against this, so it must include the base path.
+		site: new URL(url('/'), context.site),
 		items: posts.map((post) => ({
 			title: post.data.title,
 			description: post.data.description,
 			pubDate: post.data.pubDate,
 			categories: post.data.tags,
-			link: `/blog/${post.id}/`,
+			link: url(`/blog/${post.id}/`),
 		})),
 	});
 }

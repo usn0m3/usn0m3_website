@@ -2,6 +2,7 @@
 import PostListItem from '../../components/PostListItem.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getPosts } from '../../lib/collections';
+import { url } from '../../lib/url';
 
 const posts = await getPosts();
 ---
@@ -10,7 +11,7 @@ const posts = await getPosts();
 	<div class="container">
 		<header class="page-header">
 			<h1 class="page-title">Blog</h1>
-			<p class="page-intro">Notes on building software. <a class="section-link" href="/rss.xml">Subscribe via RSS</a></p>
+			<p class="page-intro">Notes on building software. <a class="section-link" href={url('/rss.xml')}>Subscribe via RSS</a></p>
 		</header>
 		{
 			posts.length > 0 ? (

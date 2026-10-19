@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import type { Project } from '../lib/collections';
+import { url } from '../lib/url';
 import Label from './Label.astro';
 
 interface Props {
@@ -11,7 +12,7 @@ interface Props {
 const { project, headingLevel = 'h3' } = Astro.props;
 const Heading = headingLevel;
 const { title, summary, stack, cover } = project.data;
-const href = `/projects/${project.id}/`;
+const href = url(`/projects/${project.id}/`);
 ---
 
 <article class="card">
