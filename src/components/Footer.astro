@@ -1,0 +1,67 @@
+---
+import type { Profile } from '../lib/collections';
+
+interface Props {
+	profile: Profile;
+}
+
+const { profile } = Astro.props;
+const year = new Date().getFullYear();
+const links = [
+	{ href: profile.links.github, label: 'GitHub' },
+	...(profile.links.linkedin ? [{ href: profile.links.linkedin, label: 'LinkedIn' }] : []),
+	{ href: `mailto:${profile.email}`, label: 'Email' },
+	{ href: '/rss.xml', label: 'RSS' },
+];
+---
+
+<footer class="site-footer">
+	<div class="container bar">
+		<ul>
+			{
+				links.map((link) => (
+					<li>
+						<a href={link.href}>{link.label}</a>
+					</li>
+				))
+			}
+		</ul>
+		<p class="copy">© {year} {profile.name}</p>
+	</div>
+</footer>
+
+<style>
+	.site-footer {
+		padding-block: var(--space-6);
+		border-top: 1px solid var(--color-hairline);
+	}
+	.bar {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-4);
+	}
+	ul {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--space-4);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	a {
+		color: var(--color-body);
+		font-size: 11px;
+		font-weight: 600;
+		letter-spacing: 1.1px;
+		text-transform: uppercase;
+	}
+	a:hover {
+		color: var(--color-ink);
+	}
+	.copy {
+		color: var(--color-muted);
+		font-size: 12px;
+	}
+</style>

@@ -1,0 +1,93 @@
+---
+interface Props {
+	name: string;
+}
+
+const { name } = Astro.props;
+const path = Astro.url.pathname;
+const links = [
+	{ href: '/projects/', label: 'Projects' },
+	{ href: '/blog/', label: 'Blog' },
+	{ href: '/about/', label: 'About' },
+];
+---
+
+<header class="site-header">
+	<div class="container bar">
+		<a class="brand" href="/"><span class="mark" aria-hidden="true"></span>{name}</a>
+		<nav aria-label="Main">
+			<ul>
+				{
+					links.map((link) => (
+						<li>
+							<a href={link.href} aria-current={path.startsWith(link.href) ? 'page' : undefined}>
+								{link.label}
+							</a>
+						</li>
+					))
+				}
+			</ul>
+		</nav>
+	</div>
+</header>
+
+<style>
+	.site-header {
+		border-bottom: 1px solid var(--color-hairline);
+	}
+	.bar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-3);
+		height: 64px;
+	}
+	.brand {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+		color: var(--color-ink);
+		font-size: 14px;
+		font-weight: 600;
+		letter-spacing: 0.65px;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+	.mark {
+		width: 8px;
+		height: 8px;
+		background: var(--color-primary);
+	}
+	ul {
+		display: flex;
+		gap: var(--space-4);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	nav a {
+		padding-block: var(--space-2);
+		border-bottom: 2px solid transparent;
+		color: var(--color-ink);
+		font-size: 13px;
+		font-weight: 600;
+		letter-spacing: 0.65px;
+		text-transform: uppercase;
+	}
+	nav a:hover {
+		color: var(--color-body);
+	}
+	nav a[aria-current='page'] {
+		border-bottom-color: var(--color-primary);
+	}
+	@media (max-width: 420px) {
+		ul {
+			gap: var(--space-3);
+		}
+		.brand,
+		nav a {
+			font-size: 12px;
+			letter-spacing: 0.4px;
+		}
+	}
+</style>

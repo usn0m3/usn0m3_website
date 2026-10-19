@@ -1,0 +1,48 @@
+---
+import '../styles/tokens.css';
+import '../styles/global.css';
+import { Font } from 'astro:assets';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { getProfile } from '../lib/collections';
+
+interface Props {
+	title?: string;
+	description?: string;
+	type?: 'website' | 'article';
+}
+
+const profile = await getProfile();
+const { title, description = profile.intro, type = 'website' } = Astro.props;
+const fullTitle = title ? `${title} — ${profile.name}` : `${profile.name} — ${profile.role}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{fullTitle}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonical} />
+		<meta property="og:title" content={fullTitle} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content={type} />
+		<meta property="og:url" content={canonical} />
+		<meta name="twitter:card" content="summary" />
+		<meta name="theme-color" content="#181818" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="alternate" type="application/rss+xml" title={`${profile.name} — Blog`} href="/rss.xml" />
+		<link rel="sitemap" href="/sitemap-index.xml" />
+		<Font cssVariable="--font-inter" preload />
+	</head>
+	<body>
+		<a class="skip-link" href="#main">Skip to content</a>
+		<Header name={profile.name} />
+		<main id="main">
+			<slot />
+		</main>
+		<Footer profile={profile} />
+	</body>
+</html>

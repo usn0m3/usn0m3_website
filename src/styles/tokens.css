@@ -1,0 +1,36 @@
+:root {
+	--color-canvas: #181818;
+	--color-surface: #303030;
+	--color-hairline: #303030;
+	--color-ink: #ffffff;
+	--color-body: #969696;
+	--color-prose: #e0e0e0;
+	--color-muted: #8f8f8f;
+	--color-primary: #da291c;
+	--color-primary-hover: #9d2211;
+	--color-primary-active: #b01e0a;
+
+	--font-sans: var(--font-inter), system-ui, sans-serif;
+	--font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+	--space-1: 4px;
+	--space-2: 8px;
+	--space-3: 16px;
+	--space-4: 24px;
+	--space-5: 32px;
+	--space-6: 48px;
+	--space-7: 64px;
+	--space-8: 96px;
+	--space-9: 128px;
+
+	--container: 1280px;
+	--gutter: clamp(16px, 4vw, 48px);
+	--section-gap: var(--space-8);
+	--measure: 70ch;
+}
+
+@media (max-width: 720px) {
+	:root {
+		--section-gap: var(--space-7);
+	}
+}
