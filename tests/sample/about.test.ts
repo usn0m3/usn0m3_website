@@ -5,9 +5,9 @@ describe('about page', () => {
 	const html = page('/about/');
 
 	it('renders bio paragraphs', () => {
-		expect(html).toContain('<title>About — Jane Doe</title>');
-		expect(html).toMatch(/<p[^>]*>I(&#39;|')m a software engineer who cares about performance/);
-		expect(html).toMatch(/<p[^>]*>Outside work I write/);
+		expect(html).toContain('<title>About — Pincheng Fan</title>');
+		expect(html).toMatch(/<p[^>]*>I(&#39;|')m an electrical engineer based in New York/);
+		expect(html).toMatch(/<p[^>]*>Learning new skills has never been more accessible/);
 	});
 
 	it('has no résumé sections — those live on LinkedIn', () => {
@@ -18,8 +18,8 @@ describe('about page', () => {
 	});
 
 	it('offers email and LinkedIn', () => {
-		expect(html).toMatch(/<a href="mailto:hello@example\.com" class="btn btn-primary"/);
-		expect(html).toMatch(/<a href="https:\/\/www\.linkedin\.com\/in\/your-profile" class="btn btn-outline"[^>]*>\s*LinkedIn/);
+		expect(html).toMatch(/<a href="mailto:fanpincheng@gmail.com" class="btn btn-primary"/);
+		expect(html).toMatch(/<a href="https:\/\/www\.linkedin\.com\/in\/pincheng-fan-69298a42a" class="btn btn-outline"[^>]*>\s*LinkedIn/);
 	});
 });
 

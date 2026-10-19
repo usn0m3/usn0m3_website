@@ -1,15 +1,15 @@
 # 个人信息，全站共用（首页、About 页、页脚）。
 # 正式履历（经历、技能、教育）放在 LinkedIn 上，这里不写。
-name: Jane Doe
-role: Software Engineer
-location: Shanghai
-headline: Built for speed. Engineered to last.
-intro: I build fast, reliable web apps with TypeScript and Go. Currently open to full-time roles and freelance projects.
+name: Pincheng Fan
+role: Electrical Engineer
+location: New York
+headline: Making the inevitable happen a little faster.
+intro: Grounded in EE. Obsessed with future trajectories. Because learning new skills has never been more accessible, I build across boundaries to make things happen. Open to opportunities that need strong electrical engineering fundamentals paired with a forward-looking, adaptable mindset.
 bio: |
-  I'm a software engineer who cares about performance, reliability and clear code. Over the past few years I've shipped products used by thousands of people every day.
+  I'm an electrical engineer based in New York. My foundation is in EE, but what drives me is where technology is heading, and helping it get there a little sooner.
 
-  Outside work I write about what I learn on this blog, contribute to open source, and tinker with developer tools.
-email: hello@example.com
+  Learning new skills has never been more accessible, so I don't stay inside one discipline. I pick up whatever a problem needs and build across boundaries to make things happen.
+email: fanpincheng@gmail.com
 links:
   github: https://github.com/usn0m3
-  linkedin: https://www.linkedin.com/in/your-profile # 没有就删掉这一行，LinkedIn 按钮会自动隐藏
+  linkedin: https://www.linkedin.com/in/pincheng-fan-69298a42a # 没有就删掉这一行，LinkedIn 按钮会自动隐藏

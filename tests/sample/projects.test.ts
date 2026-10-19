@@ -11,7 +11,7 @@ describe('projects index', () => {
 		expect(a).toBeGreaterThan(-1);
 		expect(a).toBeLessThan(b);
 		expect(b).toBeLessThan(c);
-		expect(html).toContain('<title>Projects — Jane Doe</title>');
+		expect(html).toContain('<title>Projects — Pincheng Fan</title>');
 	});
 
 	it('uses h2 headings for cards under the page h1', () => {

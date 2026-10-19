@@ -5,12 +5,12 @@ describe('home page', () => {
 	const html = page('/');
 
 	it('renders the hero from profile.yaml', () => {
-		expect(html).toContain('Built for speed. Engineered to last.');
-		expect(html).toContain('Software Engineer · Shanghai');
+		expect(html).toContain('Making the inevitable happen a little faster.');
+		expect(html).toContain('Electrical Engineer · New York');
 		expect(html).toMatch(/<a href="\/projects\/" class="btn btn-primary"[^>]*>\s*View projects/);
-		expect(html).toMatch(/<a href="https:\/\/www\.linkedin\.com\/in\/your-profile" class="btn btn-outline"[^>]*>\s*LinkedIn/);
+		expect(html).toMatch(/<a href="https:\/\/www\.linkedin\.com\/in\/pincheng-fan-69298a42a" class="btn btn-outline"[^>]*>\s*LinkedIn/);
 		expect(html).not.toContain('résumé');
-		expect(html).toMatch(/href="mailto:hello@example\.com"[^>]*>\s*Get in touch →/);
+		expect(html).toMatch(/href="mailto:fanpincheng@gmail.com"[^>]*>\s*Get in touch →/);
 	});
 
 	it('shows featured projects only, in order', () => {

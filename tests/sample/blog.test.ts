@@ -9,7 +9,7 @@ describe('blog index', () => {
 		const b = html.indexOf('Notes on testing static sites');
 		expect(a).toBeGreaterThan(-1);
 		expect(a).toBeLessThan(b);
-		expect(html).toContain('<title>Blog — Jane Doe</title>');
+		expect(html).toContain('<title>Blog — Pincheng Fan</title>');
 	});
 });
 

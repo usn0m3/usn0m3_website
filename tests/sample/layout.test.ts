@@ -6,13 +6,13 @@ describe('base layout', () => {
 
 	it('declares language and title', () => {
 		expect(html).toContain('<html lang="en"');
-		expect(html).toContain('<title>Jane Doe — Software Engineer</title>');
+		expect(html).toContain('<title>Pincheng Fan — Electrical Engineer</title>');
 	});
 
 	it('has SEO and social meta', () => {
-		expect(html).toMatch(/<meta name="description" content="I build fast, reliable web apps/);
+		expect(html).toMatch(/<meta name="description" content="Grounded in EE. Obsessed with future trajectories/);
 		expect(html).toMatch(/<link rel="canonical" href="https:\/\/usn0m3\.github\.io\/"/);
-		expect(html).toMatch(/<meta property="og:title" content="Jane Doe — Software Engineer"/);
+		expect(html).toMatch(/<meta property="og:title" content="Pincheng Fan — Electrical Engineer"/);
 		expect(html).toMatch(/<link rel="alternate" type="application\/rss\+xml"[^>]*href="\/rss\.xml"/);
 	});
 
@@ -29,7 +29,7 @@ describe('base layout', () => {
 
 	it('renders the footer links and a skip link', () => {
 		expect(html).toContain('href="https://github.com/usn0m3"');
-		expect(html).toContain('href="mailto:hello@example.com"');
+		expect(html).toContain('href="mailto:fanpincheng@gmail.com"');
 		expect(html).toContain('href="#main"');
 	});
 });
